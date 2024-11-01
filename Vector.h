@@ -1,42 +1,130 @@
+#pragma once
+#include <cmath>
+#include <algorithm>
 #include <iostream>
-#include <vector>
-
 using namespace std;
-template <class T>
+//перегрузить оператор + - *(скалярное произведение). Длина вектора. Нормализация вектора. Конструкторы копирования и присваивания(подумать не делать).
+template<class T>
 class Vector
 {
-private:
+protected:
     T* _array;
     size_t _size;
     size_t _startIndex;
 public:
-    Vector(size_t size, size_t startIndex);
-    Vector(const Vector& tmp);
-    Vector(Vector&& tmp);
-    size_t GetSize() const;
-    size_t GetStartIndex() const;
-    T& GetElem;
-    T& operator[](size_t ind)
-    Vector& operator= (const Vector& tmp);
-    bool operator==(const Vector& tmp);
-    Vector operator+ (const T& t) const;
-    Vector operator- (const T& t) const;
-    Vector operator* (const T& t) const;
-    Vector operator+ (const Vector& t) const;
-    Vector operator- (const Vector& t) const;   
-    T operator* (const Vector& t) const;
-    friend istream& operator>>(istream& in, Vector& v)
+    Vector(size_t size, size_t startIndex){
+        _array = new T[size];
+        _size = size;
+        _startIndex = startIndex;
+    };
+    
+    Vector(size_t size) : _size(size), _startIndex(0){
+        _array = new T[_size];
+        for (int i = 0; i < _size; i++){
+            _array[i] = 0;
+        }
+    }
+
+    Vector(size_t size, T* array) : _size(size), _array(new T[size]), _startIndex(0){
+        for (int i = 0; i < _size; i++){
+            _array[i] = array[i];
+        }
+    }
+
+    Vector(const Vector<T>& vec) : _size(vec._size), _array(new T[vec._size]){
+        for (int i = 0; i < _size; i++){
+            _array[i] = vec._array[i];
+        }
+    }
+
+    Vector(const Vector<T>&& vec){
+        _startIndex = vec._startIndex;
+        _size = vec._size;
+        delete [] _array;
+        _array = nullptr;
+        _array = new T[_size];
+        for (int i = 0; i < _size; i++){
+            _array[i] = vec._array[i];
+        }
+        delete [] vec._array;
+        vec._array = nullptr;
+        vec._startIndex = 0;
+        vec._size = 0;
+    }
+
+    size_t GetSize() const{
+       return _size; 
+    };
+
+    ~Vector(){
+        delete [] _array;
+        _array = nullptr;
+    }
+
+    T& GetElem(size_t i){
+        if (i >= _size){
+            throw "Out of range";
+        }
+        return _array[i];
+    };
+
+    size_t GetStartIndex() const{
+        return _startIndex;
+    };
+
+    Vector operator+(const T& tmp) const{
+        Vector ans(*this);
+        for (size_t i = 0; i < _size; i++)
+            ans[i] += tmp;
+        return ans;
+    };
+    Vector operator-(const T& tmp) const{
+        Vector ans(*this);
+        for (size_t i = 0; i < _size; i++)
+            ans[i] -= tmp;
+        return ans;
+    };
+
+    Vector operator*(const T& tmp) const{
+        Vector ans(*this);
+        for (size_t i = 0; i < _size; i++)
+            ans[i] *= tmp;
+        return ans;
+    };
+
+
+    Vector& operator=(const Vector<T>& vec){
+        _size = vec._size;
+        _startIndex = vec._startIndex;
+        delete [] _array;
+        _array = nullptr;
+        _array = new T[_size];
+        for (int i = 0; i < _size; i++){
+            _array[i] = vec._array[i];
+        }
+        return *this;
+    }
+
+    const T& operator[](int index) const{
+        return _array[index];
+    }
+
+    friend istream& operator>>(istream& in, Vector& vec)
     {
-        for (size_t i = 0; i < v._size; i++)
-            in >> v._array[i];
+        for (int i = 0; i < vec._size; i++)
+            in >> vec._array[i];
         return in;
-    };
-    friend ostream& operator<<(ostream& out, const Vector& v)
-    {
-        for (size_t i = 0; i < v._size; i++)
-            out << v._array[i] << ' ';
-        return out;
-    };
-    ~Vector();
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const Vector& tmp){
+        for (int i = 0; i < tmp._size; i++){
+            os << tmp._array[i];
+            if (i + 1 != tmp._size) os << ", ";
+        }
+        return os;
+    }
+
+
+   
 };
 
