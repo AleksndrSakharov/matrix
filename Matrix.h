@@ -23,6 +23,7 @@ public:
         this->_startIndex = mt._startIndex;
         for (size_t i = 0; i < this->_size; i++){
             delete [] this->_array[i];
+            this->_array[i] = nullptr;
             this->_array[i] = mt._array[i];
         }
 
