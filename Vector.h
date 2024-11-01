@@ -37,20 +37,12 @@ public:
         }
     }
 
-    Vector(const Vector<T>&& vec){
-        _startIndex = vec._startIndex;
-        _size = vec._size;
-        delete [] _array;
-        _array = nullptr;
-        _array = new T[_size];
-        for (int i = 0; i < _size; i++){
-            _array[i] = vec._array[i];
-        }
-        delete [] vec._array;
+    Vector(Vector<T>&& vec) noexcept : _array(vec._array), _size(vec._size), _startIndex(vec._startIndex) {
+        // Освобождаем ресурсы источника
         vec._array = nullptr;
-        vec._startIndex = 0;
         vec._size = 0;
-    }
+        vec._startIndex = 0;
+}
 
     size_t GetSize() const{
        return _size; 
