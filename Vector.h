@@ -97,7 +97,7 @@ public:
         return *this;
     }
 
-    const T& operator[](int index) const{
+    T& operator[](int index){
         return _array[index];
     }
 
