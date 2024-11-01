@@ -11,7 +11,6 @@ public:
             this->_array[i] = Vector<T> (n-i, i);
         }
     }
-    Matrix(int s = 10);
     Matrix(const Matrix& mt) : Vector<Vector<T>>(mt){
 
     }                    // копирование

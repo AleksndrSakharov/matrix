@@ -25,7 +25,7 @@ public:
         }
     }
 
-    Vector(size_t size, T* array) : _size(size), _array(new T[size]), _startIndex(0){
+    Vector(size_t size, size_t startIndex, T* array) : _size(size), _array(new T[size]), _startIndex(startIndex){
         for (int i = 0; i < _size; i++){
             _array[i] = array[i];
         }
