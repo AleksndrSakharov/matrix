@@ -12,10 +12,20 @@ protected:
     size_t _size;
     size_t _startIndex;
 public:
+    Vector() : _size(10), _startIndex(0){
+        _array = new T[_size];
+        for (int i = 0; i < _size; i++){
+            _array[i] = 0;
+        }
+    }
+
     Vector(size_t size, size_t startIndex){
         _array = new T[size];
         _size = size;
         _startIndex = startIndex;
+        for (int i = 0; i < _size; i++){
+            _array[i] = 0;
+        }
     };
     
     Vector(size_t size) : _size(size), _startIndex(0){
@@ -38,7 +48,7 @@ public:
     }
 
     Vector(Vector<T>&& vec) noexcept : _array(vec._array), _size(vec._size), _startIndex(vec._startIndex) {
-        // Освобождаем ресурсы источника
+        cout << "ABOBA";
         vec._array = nullptr;
         vec._size = 0;
         vec._startIndex = 0;
